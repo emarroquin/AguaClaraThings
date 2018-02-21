@@ -18,7 +18,7 @@ You can find a GitHub tutorial [here](https://github.com/AguaClara/aguaclara_tut
 
 1. Below this, write a sentence or two about yourself:
 
-<!--- Fill you answer here. --->
+Hello! My name is Erica and I really like cats, knitting, and candles.
 
 
 
@@ -44,7 +44,8 @@ To signify a header, use `#`. The more `#` you use, the smaller the header gets.
 
 1. Make a header of similar size as Header 3 with whatever text you want:
 
-<!--- Fill you answer here. --->
+### Erica's Favorite InstaCats
+Parker and Lilly, Elfie and Gimly, Roux the Bunny/Kangaroo Cat
 
 ## Emphasis
 There are several different ways to emphasize text: *italics*, **bold**, ***combined***, and ~~strikethrough~~.
@@ -56,7 +57,10 @@ There are several different ways to emphasize text: *italics*, **bold**, ***comb
 
 1. Write 4 of your favorite words using each type of emphasis:
 
-<!--- Fill you answer here. --->
+*Josh Peck voice*
+**EMPHASIS!!**
+***BURRITOS***
+~~plants~~
 
 
 ## Lists
@@ -68,7 +72,11 @@ Lists are very easy to do. For a bulleted list, use the asterisk and for a numbe
 
 1. Now try it out for yourself. Write down a list of things you hope to achieve this semester, and elaborate on them with sub items:
 
-<!--- Fill you answer here. --->
+* Finish old knitting projects
+  - Headwrap
+  - Green scarf
+2. Pass Coastal Engineering
+  - Pls
 
 ## Images
 To input images, you'll either need an image URL or a file path to your image. For AguaClara work, your repository should have a folder for images where you can get an image URL or file path from. In this tutorial, I've made an image folder with a picture in the `aguaclara_tutorial` repository.
@@ -213,40 +221,45 @@ These questions are meant to test what you've learned from the Python Basics tut
 
 1. Write a conditional statement with 3 conditions: when x is 10, when x is 1, and when x is anything other than 1 or 10. For each condition, have your code print what the value is or isn't.
 
-<!--- Fill you answer here. --->
-
-
-
+```python
+x = 9
+if x == 10:
+  print('x is 10')
+elif x == 1:
+  print('x is 1')
+else:
+  print('x is neither 1 nor 10')
+```
 
 2. Write a `for` loop that takes a variable with an initial value of 0, and adds the current index to the previous value of that variable (i.e. you variable should grow in size every iteration). Perform the iteration 20 times, and have the final value be printed at the end.
 
-<!--- Fill you answer here. --->
-
-
-
-
-
-
-
-
+```python
+x = 0
+for i in range(20):
+    x = x + 1
+print('x is', x)
+```
 
 3. Using the NumPy package, calculate the value of sin(4), and use the sigfig function from the utility module in aide_design to get your answer to 3 sig-figs. *(Hint: You will need to import these packages. Remember how to do that?)*
 
-<!--- Fill you answer here. --->
-
-
+```python
+answer = ut.sig(np.sin(4),3)
+print('The value of sin(4) to 3 sig-figs is ', answer,'.')
+```
 
 4. Create a `list` of length 5, and verify the length of your list. Once you've done that, turn your `list` into an `array` and apply units of meters to it. After that, create a 5x5 `array`, extract the middle row and middle column. Verify the size of your 2D `array` and apply units of liters to it.
 
-<!--- Fill you answer here. --->
+```python
+theList = [0,1,2,3,4]
+print('The length of my list is ', len(theList),'.')
 
-
-
-
-
-
-
-
+theArray = np.array(theList)*u.m
+bigArray = np.array([[1,2,3,4,5], [6,7,8,9,10], [11,12,13,14,15],     [16,17,18,19,20], [21,22,23,24,25]])
+bigArray[2,:]
+bigArray[:,2]
+print('The size of 2D array is ', np.shape(bigArray),'.')
+bigArrayUnits = bigArray*u.L
+```
 
 5.  One of the most famous equations for a particle diffusing through a liquid at low Reynolds Number is the Stokes-Einstein Equation where k<sub>B</sub> is the Boltzmann constant, T is the temperature in Kelvin, eta is the dynamic viscosity in kg/(m*s), and r is the particle radius. Write a function that takes a temperature in Kelvin, a particle radius in meters, and a viscosity of water to calculate the diffusion coefficient D.
 
@@ -261,13 +274,37 @@ from scipy.constants import Boltzmann as kB_sc # I've imported the unitless valu
 
 kB = kB_sc * u.joule / u.kelvin # I've given kB units for you in J/K; you can use the kB variable to give you Boltzmann's constant with units
 
-# Write your code here
+def stokes_einstein_equation(T,eta,r):
+  T = T*(u.kelvin)
+  r = r*(u.m)
+  d = ((kB*T)/(6*np.pi*eta*r)).to_base_units()
+  return d
 
+trial = stokes_einstein_equation(10, 100, 4)
+print('The answer to the trial run is ', trial,'.')
 ```
 
 6. You have a pipe with a radius of 0.2 m with water flowing in it at 2 m<sup>3</sup>/s. You want to see how the Reynolds Number changes as viscosity changes due to a change in temperature from 0 to 200<sup>o</sup>C. Create a plot of Reynolds Number against Temperature in Kelvin to show a relationship. Make sure your plot has a title, labeled axes, and axes grid. You can use functions from `physchem` like `pc.re_pipe` and `pc.viscosity_kinematic`. *(Hint: Make an array of temperatures to input into the `pc.viscosity_kinematic` function)*. Make sure to save your plot to your images folder in your personal repository, and display it below using `plt.show()` and an image insertion using a relative file path to the image.
 
-<!--- Fill you answer here. --->
+```python
+PipeRadius = 0.2*u.m
+FlowRate = 2*(u.m**3/u.s)
+tempArray = u.Quantity(np.arange(0, 200), u.degC)
+KinematicViscosity = pc.viscosity_kinematic(tempArray)
+
+plt.plot(tempArray, pc.re_pipe(FlowRate, PipeRadius*2, KinematicViscosity))
+plt.xlabel('Temperature (Kelvin)')
+plt.ylabel('Reynolds Number')
+plt.title('Reynolds Number vs Temperature from 0 to 200 deg C')
+plt.minorticks_on()
+plt.grid(which = 'major')
+plt.grid(which = 'minor')
+plt.tight_layout()
+plt.savefig('/images/TempVsNu.png')
+plt.show()
+```
+![TempVsNuGraph](/images/TempVsNu.png)
+
 
 # Teletype Basics
 In this section you and your team can practice using Teletype together.
@@ -276,13 +313,12 @@ In this section you and your team can practice using Teletype together.
 
 Hi Erica! You are beautiful and amazing and smart. Best former RA and TL ever!!! -sidneylok
 
-
+<333 -sung min kim
 
 
 2. Have you other team members create a portal for you to join. In their Markdown file, write them something encouraging, and sign your name.
 
-<!--- Fill you answer here. --->
-
+i luv dem.
 
 # GitHub Basics
 Congratulations! You've completed this interactive tutorial. Now all you need to do is save your work and put it on your personal repository. Toggle the Git Tab using `Cntrl + Shift + 9`.
